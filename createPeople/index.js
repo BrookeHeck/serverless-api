@@ -22,14 +22,18 @@ const PersonModel = dynamoose.model('people-401d94', schema);
 module.exports = {  
 
   handler: async (event) => {
+      try {
+        const personData = new PersonModel(event.body);
+        const personRecord = await personData.save();
 
-    const personData = new PersonModel({id: event.body.id, name: event.body.name, phone: event.body.phone})
-    const personRecord = await personData.save();
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify(personRecord),
-    }
+        return {
+          statusCode: 200,
+          body: JSON.stringify(personRecord),
+        }
+      
+    } catch(e) {
+      console.log(e);
+    }    
   }
 
 }
