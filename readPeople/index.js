@@ -17,16 +17,23 @@ const schema = new dynamoose.Schema({
   },
 });
 
+const PersonModel = dynamoose.model('people-401d94', schema);
+
 module.exports = {
 
   handler: async (event) => {
-    const PersonModel = dynamoose.model('people-401d94', schema);
 
-    let personData = await PersonModel.scan().exec();
+    let peopleData = [];
+
+    if(event.pathParameters && event.pathParameters.id) {
+      peopleData = await PersonModel.query('id').eq(event.pathParameters.id).exec();
+    } else {
+      peopleData = await PersonModel.scan().exec();
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify(personData),
+      body: JSON.stringify(peopleData),
     }
   }
 }
