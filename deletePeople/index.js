@@ -19,18 +19,21 @@ const schema = new dynamoose.Schema({
 
 const PersonModel = dynamoose.model('people-401d94', schema);
 
-module.exports = {  
-  handler: async (event) => {
-    try {
-      const personData = new PersonModel(event.body);
-      const personRecord = await personData.save();
+module.exports = {
 
-      return {
-        statusCode: 200,
-        body: JSON.stringify(personRecord),
-      };
-    } catch(e) {
-      console.log(e);
-    }    
+  handler: async (event) => {
+
+    let deletedRecord = [];
+
+    if(event.pathParameters && event.pathParameters.id) {
+      await PersonModel.delete(event.pathParameters.id);
+    } else {
+      deletedRecord = {message: 'record not found'};
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(deletedRecord),
+    };
   },
 };
