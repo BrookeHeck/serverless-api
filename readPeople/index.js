@@ -34,6 +34,6 @@ module.exports = {
     return {
       statusCode: 200,
       body: JSON.stringify(peopleData),
-    }
-  }
-}
+    };
+  },
+};
