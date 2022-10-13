@@ -23,17 +23,22 @@ module.exports = {
 
   handler: async (event) => {
 
-    let peopleData = [];
+    let updatedRecord = [];
+
+    console.log(event.body);
+    console.log(event.pathParameters.id);
 
     if(event.pathParameters && event.pathParameters.id) {
-      peopleData = await PersonModel.query('id').eq(event.pathParameters.id).exec();
+      // const body = JSON.parse(event.body);
+      await PersonModel.update({ id: event.pathParameters.id }, event.body);
+      updatedRecord = await PersonModel.query('id').eq(event.pathParameters.id).exec();
     } else {
-      peopleData = await PersonModel.scan().exec();
+      updatedRecord = {message: 'record not found'}
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify(peopleData),
+      body: JSON.stringify(updatedRecord),
     }
   }
 }

@@ -2,7 +2,7 @@
 
 const dynamoose = require('dynamoose');
 
-const schema = dynamoose.Schema({
+const schema = new dynamoose.Schema({
   id: {
     type: String,
     required: true,
@@ -17,17 +17,22 @@ const schema = dynamoose.Schema({
   },
 });
 
+const PersonModel = dynamoose.model('people-401d94', schema);
+
 module.exports = {  
-
   handler: async (event) => {
+    try {
+      let person = JSON.parse(event.body);
+      console.log(person);
+      const personData = new PersonModel(person);
+      const personRecord = await personData.save();
 
-    const PersonModel = dynamoose.model('people-401d94', schema);
-    let personRecord = await PersonModel.save();
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify(personRecord),
-    }
+      return {
+        statusCode: 200,
+        body: JSON.stringify(personRecord),
+      };
+    } catch(e) {
+      console.log(e);
+    }    
   }
-
 }
