@@ -23,17 +23,17 @@ module.exports = {
 
   handler: async (event) => {
 
-    let peopleData = [];
+    let deletedRecord = [];
 
     if(event.pathParameters && event.pathParameters.id) {
-      peopleData = await PersonModel.query('id').eq(event.pathParameters.id).exec();
+      await PersonModel.delete(event.pathParameters.id);
     } else {
-      peopleData = await PersonModel.scan().exec();
+      deletedRecord = {message: 'record not found'};
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify(peopleData),
+      body: JSON.stringify(deletedRecord),
     };
   },
 };

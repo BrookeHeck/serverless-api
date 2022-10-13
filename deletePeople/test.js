@@ -1,15 +1,14 @@
 'use strict';
 
-const createPeople = require('./index');
+const deletePeople = require('./index');
 
 const event = {
-  body: {
+  pathParameters: {
     id: '3',
-    name: 'test',
   },
 };
 
-createPeople.handler(event)
+deletePeople.handler(event)
   .then(response => {
     console.log(response);
   })

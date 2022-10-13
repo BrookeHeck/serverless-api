@@ -22,9 +22,7 @@ const PersonModel = dynamoose.model('people-401d94', schema);
 module.exports = {  
   handler: async (event) => {
     try {
-      let person = JSON.parse(event.body);
-      console.log(person);
-      const personData = new PersonModel(person);
+      const personData = new PersonModel(event.body);
       const personRecord = await personData.save();
 
       return {
@@ -34,5 +32,5 @@ module.exports = {
     } catch(e) {
       console.log(e);
     }    
-  }
-}
+  },
+};
